@@ -1,0 +1,13 @@
+C:\Users\阮琛轲\Source\Repos\TeamAssigner2.0\TeamAssigner2.0\bin\Release\TeamAssigner2.0.exe.config
+C:\Users\阮琛轲\Source\Repos\TeamAssigner2.0\TeamAssigner2.0\bin\Release\TeamAssigner2.0.exe
+C:\Users\阮琛轲\Source\Repos\TeamAssigner2.0\TeamAssigner2.0\bin\Release\TeamAssigner2.0.pdb
+C:\Users\阮琛轲\Source\Repos\TeamAssigner2.0\TeamAssigner2.0\obj\Release\TeamAssigner2.0.csprojAssemblyReference.cache
+C:\Users\阮琛轲\Source\Repos\TeamAssigner2.0\TeamAssigner2.0\obj\Release\TeamAssigner2._0.BoxConfirm.resources
+C:\Users\阮琛轲\Source\Repos\TeamAssigner2.0\TeamAssigner2.0\obj\Release\TeamAssigner2._0.Base_Form.resources
+C:\Users\阮琛轲\Source\Repos\TeamAssigner2.0\TeamAssigner2.0\obj\Release\TeamAssigner2._0.PlanCreate.resources
+C:\Users\阮琛轲\Source\Repos\TeamAssigner2.0\TeamAssigner2.0\obj\Release\TeamAssigner2._0.Properties.Resources.resources
+C:\Users\阮琛轲\Source\Repos\TeamAssigner2.0\TeamAssigner2.0\obj\Release\TeamAssigner2._0.TeamsInput.resources
+C:\Users\阮琛轲\Source\Repos\TeamAssigner2.0\TeamAssigner2.0\obj\Release\TeamAssigner2.0.csproj.GenerateResource.cache
+C:\Users\阮琛轲\Source\Repos\TeamAssigner2.0\TeamAssigner2.0\obj\Release\TeamAssigner2.0.csproj.CoreCompileInputs.cache
+C:\Users\阮琛轲\Source\Repos\TeamAssigner2.0\TeamAssigner2.0\obj\Release\TeamAssigner2.0.exe
+C:\Users\阮琛轲\Source\Repos\TeamAssigner2.0\TeamAssigner2.0\obj\Release\TeamAssigner2.0.pdb
