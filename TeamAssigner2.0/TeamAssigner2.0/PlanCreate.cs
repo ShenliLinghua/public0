@@ -46,7 +46,7 @@ namespace TeamAssigner2._0
 
         public static List<plan> plans = new List<plan>();//方案List
 
-        public static int[] sameCheck(string[] lackBox,string[] team)
+        public static int[] sameCheck(string[] team,string[] lackBox)
         {//检测队伍缺人情况，返回缺少人数以及下标
             List<int> resultList = new List<int>();//动态结果数组
             resultList.Add(0);
@@ -58,6 +58,7 @@ namespace TeamAssigner2._0
                     {
                         resultList[0] += 1;
                         resultList.Add(i);
+                        resultList.Add(j);
                     }
                 }
             }
@@ -81,18 +82,18 @@ namespace TeamAssigner2._0
                     for (int k = j + 1; k < TeamsInput.teamworks.Count; k++)
                     {//每次为一个plan（ijk3队）
                         plan tempPlan;
-
                         //第一队
                         //与lackbox比较
                         string[] tempS1 = TeamsInput.teamworks[i].team.Replace(" ", "").Split(new char[2] { ',', '，' });
-                        int[] lackArray1 = sameCheck(BoxConfirm.lackBox, tempS1);
-                        if(lackArray1[0] == 0 && lackArray1.Length == lackArray1[0] + 1)
+                        int[] lackArray1 = sameCheck(tempS1, BoxConfirm.lackBox);
+                        if (lackArray1[0] == 0 && lackArray1.Length == 1)
                         {//不缺人
                             tempPlan.team1 = new oneTeam(tempS1, TeamsInput.teamworks[i].damage, TeamsInput.teamworks[i].remark, false, -1);
                         }
-                        else if(lackArray1[0] == 1 && lackArray1.Length == lackArray1[0] + 1)
+                        else if(lackArray1[0] == 1 && lackArray1.Length == 3)
                         {//缺1人
                             tempPlan.team1 = new oneTeam(tempS1, TeamsInput.teamworks[i].damage, TeamsInput.teamworks[i].remark, true, lackArray1[1]);
+                            tempS1[lackArray1[1]] += "(借)  ";
                         }
                         else
                         {//缺2人以上
@@ -102,44 +103,55 @@ namespace TeamAssigner2._0
                         //第二队
                         //与lackbox比较
                         string[] tempS2 = TeamsInput.teamworks[j].team.Replace(" ", "").Split(new char[2] { ',', '，' });
-                        int[] lackArray2 = sameCheck(BoxConfirm.lackBox, tempS2);
-                        if (lackArray2[0] == 0 && lackArray2.Length == lackArray2[0] + 1)
+                        int[] lackArray2 = sameCheck(tempS2, BoxConfirm.lackBox);
+                        if (lackArray2[0] == 0 && lackArray2.Length == 1)
                         {//不缺人
                             tempPlan.team2 = new oneTeam(tempS2, TeamsInput.teamworks[j].damage, TeamsInput.teamworks[j].remark, false, -1);
                         }
-                        else if (lackArray2[0] == 1 && lackArray2.Length == lackArray2[0] + 1)
+                        else if (lackArray2[0] == 1 && lackArray2.Length == 3)
                         {//缺1人
                             tempPlan.team2 = new oneTeam(tempS2, TeamsInput.teamworks[j].damage, TeamsInput.teamworks[j].remark, true, lackArray2[1]);
+                            tempS2[lackArray2[1]] += " (借) ";
                         }
                         else
                         {//缺2人以上
                             continue;
                         }
                         //与1队比较
-                        int[] teamArray12 = sameCheck(tempS1, tempS2);
-                        if (teamArray12[0] == 0 && teamArray12.Length == teamArray12[0] + 1)
+                        int[] teamArray12 = sameCheck(tempS2, tempS1);
+                        if (teamArray12[0] == 0 && teamArray12.Length == 1)
                         {//不缺人
-                            
                         }
-                        else if (teamArray12[0] == 1 && teamArray12.Length == teamArray12[0] + 1)
+                        else if (teamArray12[0] == 1 && teamArray12.Length == 3)
                         {//缺1人
-                            if(tempPlan.team2.borrow)
+                            if (!tempPlan.team1.borrow)
                             {
+                                tempPlan.team1.borrow = true;
+                                tempPlan.team1.borrowIndex = teamArray12[2];
+                                tempS1[teamArray12[2]] += "(借)  ";
+                            }
+                            else if (!tempPlan.team2.borrow)
+                            {
+                                tempPlan.team2.borrow = true;
+                                tempPlan.team2.borrowIndex = teamArray12[1];
+                                tempS2[teamArray12[1]] += " (借) ";
+                            }
+                            else {
                                 continue;
                             }
-                            tempPlan.team2.borrow = true;
-                            tempPlan.team2.borrowIndex = teamArray12[1];
                         }
-                        else if(teamArray12[0] == 2 && teamArray12.Length == teamArray12[0] + 1)
+                        else if(teamArray12[0] == 2 && teamArray12.Length == 5)
                         {//缺2人，如果1队和2队都没有借人，可以各借一人
                             if (tempPlan.team1.borrow || tempPlan.team2.borrow)
                             {
                                 continue;
                             }
                             tempPlan.team1.borrow = true;
-                            tempPlan.team1.borrowIndex = teamArray12[1];
+                            tempPlan.team1.borrowIndex = teamArray12[2];
+                            tempS1[teamArray12[2]] += "(借)  ";
                             tempPlan.team2.borrow = true;
-                            tempPlan.team2.borrowIndex = teamArray12[2];
+                            tempPlan.team2.borrowIndex = teamArray12[3];
+                            tempS2[teamArray12[3]] += " (借) ";
                         }
                         else
                         {//缺3人以上
@@ -149,74 +161,100 @@ namespace TeamAssigner2._0
                         //第三队
                         //与lackbox比较
                         string[] tempS3 = TeamsInput.teamworks[k].team.Replace(" ", "").Split(new char[2] { ',', '，' });
-                        int[] lackArray3 = sameCheck(BoxConfirm.lackBox, tempS3);
-                        if (lackArray3[0] == 0 && lackArray3.Length == lackArray3[0] + 1)
+                        int[] lackArray3 = sameCheck(tempS3, BoxConfirm.lackBox);
+                        if (lackArray3[0] == 0 && lackArray3.Length == 1)
                         {//不缺人
                             tempPlan.team3 = new oneTeam(tempS3, TeamsInput.teamworks[k].damage, TeamsInput.teamworks[k].remark, false, -1);
                         }
-                        else if (lackArray3[0] == 1 && lackArray3.Length == lackArray3[0] + 1)
+                        else if (lackArray3[0] == 1 && lackArray3.Length == 3)
                         {//缺1人
                             tempPlan.team3 = new oneTeam(tempS3, TeamsInput.teamworks[k].damage, TeamsInput.teamworks[k].remark, true, lackArray3[1]);
+                            tempS3[lackArray3[1]] += "  (借)";
                         }
                         else
                         {//缺2人以上
                             continue;
                         }
                         //与1队比较
-                        int[] teamArray13 = sameCheck(tempS1, tempS3);
-                        if (teamArray13[0] == 0 && teamArray13.Length == teamArray13[0] + 1)
+                        int[] teamArray13 = sameCheck(tempS3, tempS1);
+                        if (teamArray13[0] == 0 && teamArray13.Length == 1)
                         {//不缺人
 
                         }
-                        else if (teamArray13[0] == 1 && teamArray13.Length == teamArray13[0] + 1)
+                        else if (teamArray13[0] == 1 && teamArray13.Length == 3)
                         {//缺1人
-                            if (tempPlan.team3.borrow)
+                            if (!tempPlan.team1.borrow)
+                            {
+                                tempPlan.team1.borrow = true;
+                                tempPlan.team1.borrowIndex = teamArray13[2];
+                                tempS1[teamArray13[2]] += "(借)  ";
+                            }
+                            else if (!tempPlan.team3.borrow)
+                            {
+                                tempPlan.team3.borrow = true;
+                                tempPlan.team3.borrowIndex = teamArray13[1];
+                                tempS3[teamArray13[1]] += "  (借)";
+                            }
+                            else
                             {
                                 continue;
                             }
-                            tempPlan.team3.borrow = true;
-                            tempPlan.team3.borrowIndex = teamArray13[1];
+                            
                         }
-                        else if(teamArray13[0] == 2 && teamArray13.Length == teamArray13[0] + 1)
+                        else if(teamArray13[0] == 2 && teamArray13.Length == 5)
                         {//缺2人
                             if (tempPlan.team1.borrow || tempPlan.team3.borrow)
                             {
                                 continue;
                             }
                             tempPlan.team1.borrow = true;
-                            tempPlan.team1.borrowIndex = teamArray13[1];
+                            tempPlan.team1.borrowIndex = teamArray13[2];
+                            tempS1[teamArray13[2]] += "(借)  ";
                             tempPlan.team3.borrow = true;
-                            tempPlan.team3.borrowIndex = teamArray13[2];
+                            tempPlan.team3.borrowIndex = teamArray13[3];
+                            tempS3[teamArray13[3]] += "  (借)";
                         }
                         else
                         {//缺3人以上
                             continue;
                         }
                         //与2队比较
-                        int[] teamArray23 = sameCheck(tempS2, tempS3);
-                        if (teamArray23[0] == 0 && teamArray23.Length == teamArray23[0] + 1)
+                        int[] teamArray23 = sameCheck(tempS3, tempS2);
+                        if (teamArray23[0] == 0 && teamArray23.Length == 1)
                         {//不缺人
-
+  
                         }
-                        else if (teamArray23[0] == 1 && teamArray23.Length == teamArray23[0] + 1)
+                        else if (teamArray23[0] == 1 && teamArray23.Length == 3)
                         {//缺1人
-                            if (tempPlan.team3.borrow)
+                            if (!tempPlan.team2.borrow)
+                            {
+                                tempPlan.team2.borrow = true;
+                                tempPlan.team2.borrowIndex = teamArray23[2];
+                                tempS2[teamArray23[2]] += " (借) ";
+                            }
+                            else if (!tempPlan.team3.borrow)
+                            {
+                                tempPlan.team3.borrow = true;
+                                tempPlan.team3.borrowIndex = teamArray23[1];
+                                tempS3[teamArray23[1]] += "  (借)";                          }
+                            else
                             {
                                 continue;
                             }
-                            tempPlan.team3.borrow = true;
-                            tempPlan.team3.borrowIndex = teamArray23[1];
+                            
                         }
-                        else if (teamArray23[0] == 2 && teamArray23.Length == teamArray23[0] + 1)
+                        else if (teamArray23[0] == 2 && teamArray23.Length == 5)
                         {//缺2人
                             if (tempPlan.team2.borrow || tempPlan.team3.borrow)
                             {
                                 continue;
                             }
                             tempPlan.team2.borrow = true;
-                            tempPlan.team2.borrowIndex = teamArray12[1];
+                            tempPlan.team2.borrowIndex = teamArray23[2];
+                            tempS2[teamArray23[2]] += "  (借)";
                             tempPlan.team3.borrow = true;
-                            tempPlan.team3.borrowIndex = teamArray12[2];
+                            tempPlan.team3.borrowIndex = teamArray23[3];
+                            tempS3[teamArray23[3]] += "  (借)";
                         }
                         else
                         {//缺3人以上
@@ -286,14 +324,14 @@ namespace TeamAssigner2._0
                 {
                     plan_textBox.Text += "，";
                 }
+                plan_textBox.Text += t.team[j];
                 if (t.borrow)
                 {
-                    if(j == t.borrowIndex)
+                    if (j == t.borrowIndex)
                     {
                         plan_textBox.Text += "(借)";
                     }
                 }
-                plan_textBox.Text += t.team[j];
             }
             //输出伤害
             plan_textBox.Text += " " + t.damage;

@@ -118,6 +118,7 @@ namespace TeamAssigner2._0
                 return;
             }
             addCurrentItem();
+            teams_listBox.SelectedIndex = teams_listBox.Items.Count - 1;
         }
 
         private void delete_button_MouseClick(object sender, MouseEventArgs e)
@@ -128,7 +129,14 @@ namespace TeamAssigner2._0
             }
             int ind = teams_listBox.SelectedIndex;
             deleteCurrentItem();
-            teams_listBox.SelectedIndex = ind - 1;
+            if(ind == 0 && teams_listBox.Items.Count != 0)
+            {
+                teams_listBox.SelectedIndex = ind;
+            }
+            else
+            {
+                teams_listBox.SelectedIndex = ind - 1;
+            }
         }
 
         private void amend_button_MouseClick(object sender, MouseEventArgs e)
